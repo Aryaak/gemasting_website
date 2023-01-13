@@ -1,0 +1,11 @@
+@keyframes openNavMobile {
+
+  from {
+    display: none;
+  }
+
+  to {
+    display: block;
+  }
+
+}

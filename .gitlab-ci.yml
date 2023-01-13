@@ -1,0 +1,23 @@
+stages:
+  - build
+  - deploy
+
+build:
+  stage: build
+  image: node
+  script:
+    - npm install
+    - npm run generate
+  artifacts:
+    paths:
+      - dist/
+  only:
+    - master
+
+deploy: 
+  stage: deploy
+  script:
+    - apt-get update -qq && apt-get install -y -qq lftp
+    - lftp -e "set ssl:verify-certificate no; set ftp:ssl-allow no; mirror -X .* -X .*/ --reverse --only-newer --verbose dist/ $DIR_PATH; exit;" -u $FTP_USER,$FTP_PASS $FTP_HOST
+  only:
+    - master
